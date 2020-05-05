@@ -13,21 +13,25 @@ class HashTable:
     """
     A hash table that with `capacity` buckets
     that accepts string keys
-
     Implement this.
     """
 
-    def fnv1(self, key):
-        """
-        FNV-1 64-bit hash function
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.table = [None] * capacity
 
-        Implement this, and/or DJB2.
-        """
+    def fnv1(self, key):
+        fnv_hash = 14695981039346656037
+
+        enc_key = key.encode()
+        for e in enc_key:
+            fnv_hash = fnv_hash * 1099511628211
+            fnv_hash = fnv_hash ^ e
+        return fnv_hash
 
     def djb2(self, key):
         """
         DJB2 32-bit hash function
-
         Implement this, and/or FNV-1.
         """
 
@@ -36,41 +40,41 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+        return self.fnv1(key) % self.capacity
+        #return self.djb2(key) % self.capacity
 
     def put(self, key, value):
         """
         Store the value with the given key.
-
         Hash collisions should be handled with Linked List Chaining.
-
         Implement this.
         """
+        index = self.hash_index(key)
+        self.table[index] = value
+
 
     def delete(self, key):
         """
         Remove the value stored with the given key.
-
         Print a warning if the key is not found.
-
         Implement this.
         """
+        index = self.hash_index(key)
+        self.table[index] = None
 
     def get(self, key):
         """
         Retrieve the value stored with the given key.
-
         Returns None if the key is not found.
-
         Implement this.
         """
+        index = self.hash_index(key)
+        return self.table[index]
 
     def resize(self):
         """
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
-
         Implement this.
         """
 
