@@ -50,7 +50,21 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        self.table[index] = value
+        node = self.table[index] 
+        if node == None:
+            self.table[index] = HashTableEntry(key, value)
+        elif node.key == key:
+            node.value = value
+        else:
+            while node != None:
+                
+                if node.key == key:
+                    node.value = value
+                    return
+                elif node.next == None:
+                    node.next = HashTableEntry(key, value)
+                    return
+                node = node.next
 
 
     def delete(self, key):
@@ -60,7 +74,21 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        self.table[index] = None
+        node = self.table[index]
+        prev = None 
+        if node == None:
+            return None
+        elif node.key == key:
+            if node.next == None:
+                self.table[index] = None
+        else:
+            while node.next != None:
+                prev = node
+                node = node.next
+                if node.key == key:
+                    prev.next = node.next
+                    return node
+        return None
 
     def get(self, key):
         """
@@ -69,7 +97,22 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        return self.table[index]
+        node = self.table[index] 
+        if node == None:
+            return None
+        elif node.key == key:
+            print('elif', node.value, node.next)
+            return node.value
+            
+        else:
+            while node != None:
+                node = node.next
+                if node == None:
+                    return None
+                if node.key == key:
+                    print(node.value)
+                    return node.value
+                
 
     def resize(self):
         """
